@@ -202,22 +202,29 @@ p {
   <form onsubmit="generateInvoice(); return false;">
     <div class="form-grid">
 
-      <input type="file" id="logoUpload" class="full-width" style="width: 96%;">
+      <div class="full-width">
+  <input type="file" id="logoUpload" accept="image/*" style="width:96%;">
 
-      <input id="name" placeholder="Customer Name" >
-      <input id="bookingId" placeholder="Booking ID" >
+  <div style="margin-top:10px;">
+    <img id="logoFormPreview"
+         style="display:none; height:80px; border:1px solid #ccc; padding:5px;">
+  </div>
+</div>
 
-      <input id="tripDateTime" type="datetime-local" >
-      <input id="bookingType" placeholder="Booking Type" >
+      <input id="name" placeholder="Customer Name" required>
+      <input id="bookingId" placeholder="Booking ID" required>
 
-      <input id="pickup" placeholder="Pickup Location" >
-      <input id="drop" placeholder="Drop Location" >
+      <input id="tripDateTime" type="datetime-local" required>
+      <input id="bookingType" placeholder="Booking Type" required>
 
-      <input id="fare" placeholder="Fare" >
+      <input id="pickup" placeholder="Pickup Location" required>
+      <input id="drop" placeholder="Drop Location" required>
+
+      <input id="fare" placeholder="Fare" required>
       <input id="bata" placeholder="Bata">
 
       <input id="toll" placeholder="Toll">
-      <input id="receiptInput" placeholder="Receipt Number" >
+      <input id="receiptInput" placeholder="Receipt Number" required>
 
       <button type="submit" class="primary full-width">Generate Invoice</button>
 
@@ -410,6 +417,28 @@ function editInvoice(){
   formSection.style.display = "block";
   invoiceSection.style.display = "none";
 }
+
+document.getElementById("logoUpload").addEventListener("change", function () {
+
+  let file = this.files[0];
+
+  if (file) {
+    let reader = new FileReader();
+
+    reader.onload = function (e) {
+      // Form preview
+      let preview = document.getElementById("logoFormPreview");
+      preview.src = e.target.result;
+      preview.style.display = "block";
+
+      // Invoice logo bhi set kar do (optional)
+      document.getElementById("logoPreview").src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+});
 
 function downloadPDF() {
 
